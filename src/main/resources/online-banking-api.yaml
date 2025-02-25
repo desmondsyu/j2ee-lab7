@@ -96,6 +96,27 @@ components:
         currency: "CAD"
         amount: 100.00
         createdAt: "2021-01-01T00:00:00Z"
+    ApiException:
+      type: object
+      x-class-name: ApiException
+      properties:
+        status:
+          type: integer
+          format: int32
+        message:
+          type: string
+        details:
+          type: array
+          items:
+            type: string
+      example:
+        status: 500
+        message: "Internal Server Error"
+        details:
+          - "Unexpected null value encountered"
+          - "Failed to process request"
+
+
 paths:
   /auth/login:
     post:
