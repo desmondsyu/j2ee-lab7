@@ -61,6 +61,12 @@
             <scope>test</scope>
         </dependency>
         <dependency>
+            <groupId>org.openapitools</groupId>
+            <artifactId>jackson-databind-nullable</artifactId>
+            <version>0.2.6</version>  <!-- Use latest version if available -->
+        </dependency>
+
+        <dependency>
             <groupId>org.springdoc</groupId>
             <artifactId>springdoc-openapi-ui</artifactId>
             <version>1.8.0</version>
@@ -113,6 +119,7 @@
                             <configOptions>
                                 <interfaceOnly>true</interfaceOnly>
                                 <dateLibrary>java8</dateLibrary>
+                                <useJakartaEe>true</useJakartaEe>
                             </configOptions>
                         </configuration>
                     </execution>
