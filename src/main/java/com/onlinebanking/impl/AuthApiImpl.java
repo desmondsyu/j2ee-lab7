@@ -8,8 +8,12 @@ import org.springframework.stereotype.Service;
 @Service
 public class AuthApiImpl implements AuthApi {
 
+    static {
+
+    }
+
     @Override
-    public ResponseEntity<LoginResponse> loginUser(LoginRequest loginRequest) {
+    public ResponseEntity<LoginResponse> authLoginPost(LoginRequest loginRequest) {
         if ("user".equals(loginRequest.getEmail()) && "password".equals(loginRequest.getPassword())) {
             LoginResponse response = new LoginResponse();
             response.setToken("mock-jwt-token");
@@ -19,7 +23,7 @@ public class AuthApiImpl implements AuthApi {
     }
 
     @Override
-    public ResponseEntity<Void> logoutUser() {
+    public ResponseEntity<Void> authLogoutPost() {
         return ResponseEntity.ok().build();
     }
 }

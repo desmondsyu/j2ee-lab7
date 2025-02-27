@@ -47,7 +47,7 @@ public class TransactionsApiImpl implements TransactionsApi {
 
 
     @Override
-    public ResponseEntity<Void> initiateFundTransfer(TransferRequest request) {
+    public ResponseEntity<Transaction> transactionsTransferPost(TransferRequest request) {
         Transaction transaction = new Transaction();
         transaction.setFromAccount(request.getFromAccount());
         transaction.setToAccount(request.getToAccount());
@@ -57,7 +57,7 @@ public class TransactionsApiImpl implements TransactionsApi {
     }
 
     @Override
-    public ResponseEntity<List<Transaction>> getTransactionHistory() {
+    public ResponseEntity<List<Transaction>> transactionsHistoryGet() {
         return ResponseEntity.ok(transactions);
     }
 }

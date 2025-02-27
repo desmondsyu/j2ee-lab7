@@ -12,7 +12,7 @@ import java.util.Map;
 
 @Service
 public class AccountsApiImpl implements AccountsApi {
-    private static final Map<String, Account> accounts = new HashMap<>();
+    private static final Map<Integer, Account> accounts = new HashMap<>();
 
     static {
         // Dummy Account Data using Setters
@@ -22,7 +22,7 @@ public class AccountsApiImpl implements AccountsApi {
         account1.setAccountNumber("ACC123456");
         account1.setBalance(new BigDecimal("5000.00"));
         account1.setCreatedAt(OffsetDateTime.now());
-        accounts.put(account1.getAccountNumber(), account1);
+        accounts.put(account1.getId(), account1);
 
         Account account2 = new Account();
         account2.setId(2);
@@ -30,7 +30,7 @@ public class AccountsApiImpl implements AccountsApi {
         account2.setAccountNumber("ACC789012");
         account2.setBalance(new BigDecimal("7500.50"));
         account2.setCreatedAt(OffsetDateTime.now());
-        accounts.put(account2.getAccountNumber(), account2);
+        accounts.put(account2.getId(), account2);
 
         Account account3 = new Account();
         account3.setId(3);
@@ -38,19 +38,19 @@ public class AccountsApiImpl implements AccountsApi {
         account3.setAccountNumber("ACC345678");
         account3.setBalance(new BigDecimal("3000.00"));
         account3.setCreatedAt(OffsetDateTime.now());
-        accounts.put(account3.getAccountNumber(), account3);
+        accounts.put(account3.getId(), account3);
     }
 
 
     @Override
-    public ResponseEntity<Account> accountsIdGet(String accountId) {
+    public ResponseEntity<Account> accountsIdGet(Integer accountId) {
         Account account = accounts.get(accountId);
         return (account != null) ? ResponseEntity.ok(account) : ResponseEntity.notFound().build();
     }
 
     @Override
-    public ResponseEntity<Void> accountsIdPut(String accountId, Account account) {
-        accounts.put(accountId, account);
+    public ResponseEntity<Account> accountsIdPut(Integer id, Account account) {
+        accounts.put(id, account);
         return ResponseEntity.ok().build();
     }
 }
