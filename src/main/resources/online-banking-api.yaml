@@ -25,31 +25,28 @@ components:
       example:
         message: "Invalid token"
         errorCode: 401
-    User:
+
+    LoginRequest:
       type: object
       properties:
-        id:
-          type: integer
-        username:
-          type: string
         email:
           type: string
           format: email
         password:
           type: string
           format: password
-        role:
+      required:
+        - email
+        - password
+
+    LoginResponse:
+      type: object
+      properties:
+        token:
           type: string
-        createdAt:
-          type: string
-          format: date-time
       example:
-        id: 1
-        username: "John Doe"
-        email: "john.doe@example.com"
-        password: "password"
-        role: "admin"
-        createdAt: "2021-01-01T00:00:00Z"
+        token: "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9..."
+
     Account:
       type: object
       properties:
@@ -64,13 +61,8 @@ components:
         createdAt:
           type: string
           format: date-time
-      example:
-        id: 1
-        userId: 1
-        accountNumber: "123456"
-        balance: 1000.00
-        createdAt: "2021-01-01T00:00:00Z"
-    Transfer:
+
+    Transaction:
       type: object
       properties:
         id:
@@ -79,42 +71,28 @@ components:
           type: string
         toAccount:
           type: string
-        currency:
-          type: string
         amount:
           type: number
         status:
           type: string
-          enum: ["Pending", "Completed", "Failed"]
+          enum: [ "Pending", "Completed", "Failed" ]
         createdAt:
           type: string
           format: date-time
-      example:
-        id: 1
-        fromAccount: "123456"
-        toAccount: "654321"
-        currency: "CAD"
-        amount: 100.00
-        createdAt: "2021-01-01T00:00:00Z"
-    ApiException:
+
+    TransferRequest:
       type: object
-      x-class-name: ApiException
       properties:
-        status:
-          type: integer
-          format: int32
-        message:
+        fromAccount:
           type: string
-        details:
-          type: array
-          items:
-            type: string
-      example:
-        status: 500
-        message: "Internal Server Error"
-        details:
-          - "Unexpected null value encountered"
-          - "Failed to process request"
+        toAccount:
+          type: string
+        amount:
+          type: number
+      required:
+        - fromAccount
+        - toAccount
+        - amount
 
 
 paths:
@@ -127,14 +105,7 @@ paths:
         content:
           application/json:
             schema:
-              type: object
-              properties:
-                email:
-                  type: string
-                  format: email
-                password:
-                  type: string
-                  format: password
+              $ref: "#/components/schemas/LoginRequest"
             example:
               username: "john.doe@example.com"
               password: "password"
@@ -147,12 +118,7 @@ paths:
           content:
             application/json:
               schema:
-                type: object
-                properties:
-                  token:
-                    type: string
-              example:
-                token: "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9..."
+                $ref: "#/components/schemas/LoginResponse"
         "401":
           description: "Invalid credentials"
           content:
@@ -166,18 +132,11 @@ paths:
     post:
       summary: "Invalidate the JWT token"
       description: "Logs out a user and invalidates the authentication token."
+      security:
+        - BearerAuth: []
       responses:
         "200":
           description: "Successful logout"
-          content:
-            application/json:
-              schema:
-                type: object
-                properties:
-                  message:
-                    type: string
-              example:
-                message: "Successfully logged out"
         "401":
           description: "Unauthorized"
           content:
@@ -187,6 +146,7 @@ paths:
               example:
                 message: "Invalid token"
                 errorCode: 401
+
   /accounts/{id}:
     get:
       summary: "Get account details"
@@ -276,33 +236,19 @@ paths:
         content:
           application/json:
             schema:
-              type: object
-              properties:
-                fromAccount:
-                  type: string
-                toAccount:
-                  type: string
-                currency:
-                  type: string
-                amount:
-                  type: number
-              example:
-                fromAccount: "123456"
-                toAccount: "654321"
-                currency: "CAD"
-                amount: 100.00
-              required:
-                - fromAccount
-                - toAccount
-                - currency
-                - amount
+              $ref: "#/components/schemas/TransferRequest"
+            example:
+              fromAccount: "123456"
+              toAccount: "654321"
+              currency: "CAD"
+              amount: 100.00
       responses:
         "200":
           description: "Successful transfer"
           content:
             application/json:
               schema:
-                $ref: "#/components/schemas/Transfer"
+                $ref: "#/components/schemas/Transaction"
               example:
                 id: 1
                 fromAccount: "123456"
@@ -361,7 +307,7 @@ paths:
               schema:
                 type: array
                 items:
-                  $ref: "#/components/schemas/Transfer"
+                  $ref: "#/components/schemas/Transaction"
               example:
                 - id: 1
                   fromAccount: "123456"
