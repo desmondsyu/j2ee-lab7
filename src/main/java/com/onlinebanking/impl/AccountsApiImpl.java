@@ -3,14 +3,16 @@ package com.onlinebanking.impl;
 import com.onlinebanking.api.AccountsApi;
 import com.onlinebanking.model.Account;
 import org.springframework.http.ResponseEntity;
+import org.springframework.stereotype.Controller;
 import org.springframework.stereotype.Service;
+import org.springframework.web.bind.annotation.RestController;
 
 import java.math.BigDecimal;
 import java.time.OffsetDateTime;
 import java.util.HashMap;
 import java.util.Map;
 
-@Service
+@RestController
 public class AccountsApiImpl implements AccountsApi {
     private static final Map<Integer, Account> accounts = new HashMap<>();
 

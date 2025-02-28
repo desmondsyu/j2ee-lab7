@@ -5,13 +5,14 @@ import com.onlinebanking.model.Transaction;
 import com.onlinebanking.model.TransferRequest;
 import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Service;
+import org.springframework.web.bind.annotation.RestController;
 
 import java.math.BigDecimal;
 import java.time.OffsetDateTime;
 import java.util.ArrayList;
 import java.util.List;
 
-@Service
+@RestController
 public class TransactionsApiImpl implements TransactionsApi {
     private static final List<Transaction> transactions = new ArrayList<>();
 
