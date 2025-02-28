@@ -10,6 +10,7 @@ import org.springframework.web.bind.annotation.RestController;
 import java.math.BigDecimal;
 import java.time.OffsetDateTime;
 import java.util.ArrayList;
+import java.util.Date;
 import java.util.List;
 
 @RestController
@@ -50,9 +51,15 @@ public class TransactionsApiImpl implements TransactionsApi {
     @Override
     public ResponseEntity<Transaction> transactionsTransferPost(TransferRequest request) {
         Transaction transaction = new Transaction();
+
+        int newId = transactions.isEmpty() ? 1 : transactions.get(transactions.size() - 1).getId() + 1;
+        transaction.setId(newId);
+
         transaction.setFromAccount(request.getFromAccount());
         transaction.setToAccount(request.getToAccount());
         transaction.setAmount(request.getAmount());
+        transaction.setCreatedAt(OffsetDateTime.now());
+        transaction.setStatus(Transaction.StatusEnum.PENDING);
         transactions.add(transaction);
         return ResponseEntity.ok().build();
     }
